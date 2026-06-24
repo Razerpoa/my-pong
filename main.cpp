@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "icon.h"
+#include <random>
 
 const float SPEED = 450;
 
@@ -10,6 +11,14 @@ struct MoveableObject {
 
 enum class OpponentType { Human, AI };
 
+float random_float(float low, float high) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    
+    std::uniform_real_distribution<float> distrib(low, high);
+    return distrib(gen);
+}
+    
 void reset(const float &window_width, const float &window_height,
                const int &paddle_edge_offset, MoveableObject &left_paddle,
                MoveableObject &right_paddle, MoveableObject &ball) {
@@ -73,7 +82,7 @@ int main() {
 
     reset(window_width, window_height, paddle_edge_offset, left_paddle, right_paddle, ball);
 
-    ball.velocity = {-1.0f, 0.0f};
+    ball.velocity = {-1.0f, random_float(-1.0f, 1.0f)};
     while (!WindowShouldClose()) {
         float dt = GetFrameTime();
         left_paddle.velocity = {0.0f, 0.0f};
@@ -110,12 +119,12 @@ int main() {
         if (ball.mesh.x < left_paddle.mesh.x) {
             opponent_score += 1;
             reset(window_width, window_height, paddle_edge_offset, left_paddle, right_paddle, ball);
-            ball.velocity = {1.0f, 0.0f};
+            ball.velocity = {1.0f, random_float(-1.0f, 1.0f)};
         }
         if (ball.mesh.x + ball.mesh.width > right_paddle.mesh.x + right_paddle.mesh.width) {
             player_score += 1;
             reset(window_width, window_height, paddle_edge_offset, left_paddle, right_paddle, ball);
-            ball.velocity = {-1.0f, 0.0f};
+            ball.velocity = {-1.0f, random_float(-1.0f, 1.0f)};
         }
         if (ball.mesh.y < 0.0f || ball.mesh.y + ball.mesh.height > window_height) {
             ball.velocity.y = -ball.velocity.y;
