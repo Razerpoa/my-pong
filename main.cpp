@@ -44,18 +44,19 @@ int main() {
     SetTargetFPS(60);
     SetExitKey(KEY_Q);
 
-    MoveableObject left_paddle =  {
-        .mesh = {
-            .width = 10,
-            .height = 100,
-        }
-    };
-    MoveableObject right_paddle = {
-        .mesh = {
-            .width = 10,
-            .height = 100,
-        }
-    };
+    MoveableObject left_paddle;
+    MoveableObject right_paddle;
+    {
+        MoveableObject paddle =  {
+            .mesh = {
+                .width = 10,
+                .height = 100,
+            }
+        };
+        left_paddle = paddle;
+        right_paddle = paddle;
+    }
+    
     MoveableObject ball =  {
         .mesh = {
             .width = 10.0f,
